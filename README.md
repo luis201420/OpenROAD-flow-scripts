@@ -46,6 +46,14 @@ timeline
 
 ## Tool Installation
 
+There are different ways to install and develop OpenROAD and ORFS, which is the best fit depends use-case, experience and personal taste.
+
+### Use Bazel, avoid installing anything at all and adapt the flow to your needs in your own repository
+
+[bazel-orfs](https://github.com/The-OpenROAD-Project/bazel-orfs) provides a seamless, reproducible way to manage dependencies and adapt the flow without requiring manual installations(no Docker images, sudo bash scripts, etc.)
+
+By leveraging [Bazel](https://bazel.build/)'s robust build system, all dependencies are automatically resolved, versioned, and built in a consistent environment. This eliminates setup complexity, ensures fast incremental builds, and allows for easy customization of the flow, making it an efficient choice for both [beginners](https://github.com/Pinata-Consulting/RegFileStudy) and [advanced](https://github.com/The-OpenROAD-Project/megaboom) users.
+
 ### Docker Based Installation
 
 To ease dependency installation issues, ORFS uses docker images.
@@ -90,12 +98,29 @@ Document for detailed local build from sources and installation steps found [her
   individual flows commands, see the documentation
   [here](https://openroad.readthedocs.io/en/latest/).
 - For details about automated flow setup, see ORFS docs
-  [here](https://openroad-flow-scripts.readthedocs.io/en/latest/user/GettingStarted.html).
+  [here](https://openroad-flow-scripts.readthedocs.io/en/latest/index2.html#getting-started-with-openroad-flow-scripts).
 - Flow tutorial to run the complete OpenROAD based flow from
   RTL-GDSII, see the tutorial
   [here](https://openroad-flow-scripts.readthedocs.io/en/latest/tutorials/FlowTutorial.html).
 - To watch ORFS flow tutorial videos, check
   [here](https://theopenroadproject.org/video).
+
+## Building from your own git repository
+
+ORFS supports hosting projects in your own git repository
+without the need to fork ORFS.
+
+To build from your own git repository:
+
+    cd /home/me/myproject
+    make --file=~/OpenROAD-flow-scripts/flow/Makefile DESIGN_CONFIG=somefolder/config.mk ...
+
+## Running a quick smoke-test of ORFS on your own Verilog
+
+You can [run ORFS on your own Verilog files](./flow/designs/asap7/minimal/README.md)
+without setting up a project or moving your Verilog files and even learn
+a thing or two about floorplan, placement and routing
+before you create an .sdc file and a config.mk file.
 
 ## Citing this Work
 

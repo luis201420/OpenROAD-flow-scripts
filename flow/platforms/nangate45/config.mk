@@ -22,7 +22,7 @@ export FILL_CELLS ?= FILLCELL_X1 FILLCELL_X2 FILLCELL_X4 FILLCELL_X8 FILLCELL_X1
 #  Yosys
 #  ----------------------------------------------------
 # Ungroup size for hierarchical synthesis
-export MAX_UNGROUP_SIZE ?= 10000
+export SYNTH_MINIMUM_KEEP_SIZE ?= 10000
 # Set the TIEHI/TIELO cells
 # These are used in yosys synthesis to avoid logical 1/0's in the netlist
 export TIEHI_CELL_AND_PORT = LOGIC1_X1 Z
@@ -50,8 +50,8 @@ export ABC_LOAD_IN_FF = 3.898
 export PLACE_SITE = FreePDK45_38x28_10R_NP_162NW_34O
 
 # IO Placer pin layers
-export IO_PLACER_H = metal5
-export IO_PLACER_V = metal6
+export IO_PLACER_H ?= metal5
+export IO_PLACER_V ?= metal6
 
 # Define default PDN config
 export PDN_TCL ?= $(PLATFORM_DIR)/grid_strategy-M1-M4-M7.tcl
@@ -61,7 +61,6 @@ export TAPCELL_TCL ?= $(PLATFORM_DIR)/tapcell.tcl
 export TAP_CELL_NAME = TAPCELL_X1
 
 export MACRO_PLACE_HALO ?= 22.4 15.12
-export MACRO_PLACE_CHANNEL ?= 18.8 19.95
 
 #---------------------------------------------------------
 # Place
@@ -73,7 +72,12 @@ export PLACE_DENSITY ?= 0.30
 # ---------------------------------------------------------
 # FastRoute options
 export MIN_ROUTING_LAYER = metal2
+export MIN_CLK_ROUTING_LAYER = metal4
 export MAX_ROUTING_LAYER = metal10
+
+# Max iterations of repair antennas
+export MAX_REPAIR_ANTENNAS_ITER_GRT ?= 5
+export MAX_REPAIR_ANTENNAS_ITER_DRT ?= 5
 
 # Define fastRoute tcl
 export FASTROUTE_TCL ?= $(PLATFORM_DIR)/fastroute.tcl
@@ -103,6 +107,6 @@ export RCX_RULES               = $(PLATFORM_DIR)/rcx_patterns.rules
 
 # IR drop estimation supply net name to be analyzed and supply voltage variable
 # For multiple nets: PWR_NETS_VOLTAGES  = "VDD1 1.8 VDD2 1.2"
-export PWR_NETS_VOLTAGES  ?= "VDD 1.1"
-export GND_NETS_VOLTAGES  ?= "VSS 0.0"
+export PWR_NETS_VOLTAGES  ?= VDD 1.1
+export GND_NETS_VOLTAGES  ?= VSS 0.0
 export IR_DROP_LAYER ?= metal1

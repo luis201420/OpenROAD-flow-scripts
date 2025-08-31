@@ -79,7 +79,6 @@ export TAPCELL_TCL                           ?= $(PLATFORM_DIR)/openROAD/tapcell
 
 # macro planning
 export MACRO_PLACE_HALO                      ?= 10 10
-export MACRO_PLACE_CHANNEL                   ?= 20.16 20.16
 
 #---------------------------------------------------------
 # Place
@@ -93,6 +92,10 @@ export PLACE_DENSITY                         ?= 0.40
 export MIN_ROUTING_LAYER                     ?= Metal2
 export MAX_ROUTING_LAYER                     ?= Metal5
 export DISABLE_VIA_GEN                       ?= 1
+
+# Max iterations of repair antennas
+export MAX_REPAIR_ANTENNAS_ITER_GRT ?= 5
+export MAX_REPAIR_ANTENNAS_ITER_DRT ?= 5
 
 # Define fastRoute tcl
 export FASTROUTE_TCL ?= $(PLATFORM_DIR)/fastroute.tcl
@@ -121,19 +124,28 @@ export RCX_RC_CORNER                          = $($(CORNER)_RCX_RC_CORNER)
 #----------------------------------------------------------------------------------------------------
 export BC_LIB_FILES                           = $(abspath $(PLATFORM_DIR)/lib/gf180mcu_fd_sc_mcu$(TRACK_OPTION)$(POWER_OPTION)__ff_n40C_5v50.lib.gz)
 export BC_TEMPERATURE                         = -40c
+export BC_VOLTAGE                             = 5.5
 
 export WC_LIB_FILES                           = $(abspath $(PLATFORM_DIR)/lib/gf180mcu_fd_sc_mcu$(TRACK_OPTION)$(POWER_OPTION)__ss_125C_4v50.lib.gz)
 export WC_TEMPERATURE                         = 125c
+export WC_VOLTAGE                             = 4.5
 
 export TC_LIB_FILES                           = $(abspath $(PLATFORM_DIR)/lib/gf180mcu_fd_sc_mcu$(TRACK_OPTION)$(POWER_OPTION)__tt_025C_5v00.lib.gz)
 export TC_TEMPERATURE                         = 25c
+export TC_VOLTAGE                             = 5.0
 
 # ----------------------------------------------------------------------------------------------------
 # now, set files from user setting CORNER
 # ----------------------------------------------------------------------------------------------------
 export TEMPERATURE                           = $($(CORNER)_TEMPERATURE)
+export VOLTAGE                               = $($(CORNER)_VOLTAGE)
 export LIB_FILES                             = $($(CORNER)_LIB_FILES) \
                                                $(ADDITIONAL_LIBS)
+
+# IR drop estimation supply net name to be analyzed and supply voltage variable
+export PWR_NETS_VOLTAGES  ?= VDD $(VOLTAGE)
+export GND_NETS_VOLTAGES  ?= VSS 0.0
+export IR_DROP_LAYER ?= Metal1
 
 # For proprietary tool enablements that are not public
 export GF180_PRIVATE_DIR ?= ../../gf180-private

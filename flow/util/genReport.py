@@ -15,10 +15,11 @@ SINGLE_REPORT_FILENAME = f"{REPORTS_FOLDER}/report.log"
 SUMMARY_FILENAME = f"{REPORTS_FOLDER}/report-summary.log"
 DRC_FILENAME = "5_route_drc.rpt"
 LAST_EXPECTED_LOG = ["6_report.log", "generate_abstract.log"]
-METRICS_LOG_FMT = "gen-metrics-{}-check.log"
-METRICS_CHECK_FMT = "{}/metadata-{}-check.log"
+METRICS_LOG_FMT = "metadata-generate.log"
+METRICS_CHECK_FMT = "{}/metadata-check.log"
 REGEX_ERROR = re.compile(r"^\[error ?(\w+-\d+)?\]", re.IGNORECASE)
 REGEX_WARNING = re.compile(r"^\[warning ?(\w+-\d+)?\]", re.IGNORECASE)
+SKIPPED_FLOW_VARIANT_KEYWORDS = ["test", "tune"]
 STATUS_GREEN = "Passing"
 STATUS_RED = "Failing"
 
@@ -248,7 +249,9 @@ for log_dir, dirs, files in sorted(os.walk(LOGS_FOLDER, topdown=False)):
     dir_list = log_dir.split(os.sep)
     # Handles autotuner folders, which do not have `report.log` natively.
     # TODO: Can we log something for autotuner?
-    if len(dir_list) != 4 or "test-" in dir_list[-1]:
+    if len(dir_list) != 4 or any(
+        word in dir_list[-1] for word in SKIPPED_FLOW_VARIANT_KEYWORDS
+    ):
         continue
     report_dir = log_dir.replace(LOGS_FOLDER, REPORTS_FOLDER)
 
@@ -270,13 +273,13 @@ for log_dir, dirs, files in sorted(os.walk(LOGS_FOLDER, topdown=False)):
 
     # check if metrics generation had issues
     d["metrics_logs_errors"], d["metrics_logs_warnings"] = parse_messages(
-        os.path.join(report_dir, METRICS_LOG_FMT.format(variant)),
+        os.path.join(report_dir, METRICS_LOG_FMT),
         print_missing=d["finished"],
     )
 
     # check if metrics passed
     d["metrics_errors"], d["metrics_warnings"] = parse_messages(
-        METRICS_CHECK_FMT.format(report_dir, variant), print_missing=d["finished"]
+        METRICS_CHECK_FMT.format(report_dir), print_missing=d["finished"]
     )
 
     # check if calibre was run and if drc check passed
